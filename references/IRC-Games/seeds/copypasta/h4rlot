@@ -1,0 +1,2 @@
+/alias asdasdasd script exec my \$rc = sub {return int(rand(14)) + 2}\; my \$sw = sprintf("\x03%s,%s卐\x0f", \$rc->(), 
+            \$rc->())\; Irssi::active_win()->command(sprintf("say \$sw \x1f\x03%s%s\x0f \$sw", \$rc->(), "$*"))
