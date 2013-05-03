@@ -3,7 +3,7 @@ from ircutils import client
 import ConfigParser
 
 
-class IrcBot():
+class IrcBot(client.SimpleClient):
 
     def __init__(self, config_file):
         #Parse Configuration File
@@ -19,21 +19,30 @@ class IrcBot():
         self.owner = config.get('Settings', 'owner')
 
         channels_string = config.get('Settings', 'channels')
-        self.channels = list(filter(None, (x.strip() for x in channels_string.splitlines())))
+        self.channels_join = list(filter(None, (x.strip() for x in channels_string.splitlines())))
 
-        self.bot = client.SimpleClient(nick = self.nick)
+        ##self.bot = client.SimpleClient(nick = self.nick)
+        client.SimpleClient.__init__(self, self.nick)
 
-    def message_printer(self, event):
+    def message_printer(self, client, event):
         print "<{0}/{1}> {2}".format(event.source, event.target, event.message)
 
     def notice_printer(self, client, event):
         print "(NOTICE) {0}".format(event.message)
 
-    def welcome_message(self,event):
-        print "OMG WELCOME"
+    def welcome_message(self,client,event):
+        print "INSIDE THE LOOP"
+        print self.channels
+        for chan in self.channels_join:
+            print "Starting to join",chan
+            self.join(chan)
+            print "Joining", chan
+
+        print "OUTSIDE THE LOOP"
 
     def bot_start(self):
-        self.bot["welcome"].add_handler(self.welcome_message)
-        self.bot["notice"].add_handler(self.notice_printer)
-        self.bot.connect(self.server, self.port)
-        self.bot.start()
+        self["welcome"].add_handler(self.welcome_message)
+        self["notice"].add_handler(self.notice_printer)
+        self["channel_message"].add_handler(self.message_printer, priority=1)
+        self.connect(self.server, self.port)
+        self.start()
