@@ -2,6 +2,7 @@
 
 # Ignores
 /.idea
+/bots/configs/twitch_config.cfg
 
 # C extensions
 *.so

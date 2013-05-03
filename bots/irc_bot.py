@@ -37,5 +37,5 @@ class IrcBot(client.SimpleClient):
         self["welcome"].add_handler(self.welcome_message)
         self["notice"].add_handler(self.notice_printer)
         self["channel_message"].add_handler(self.message_printer, priority=1)
-        self.connect(self.server, self.port)
+        self.connect(self.server, self.port, password=self.password)
         self.start()
