@@ -13,7 +13,7 @@ def run(inp,sender,channel):
     words = [line.strip() for line in open('../plugins/items.dic')]
     gift = random.choice(words).upper()
     
-    plural = pluralize(gift)
+    plural = pluralize(gift).upper()
     
     if gift[0] in vowels:
         gift = 'N ' + gift
