@@ -31,14 +31,8 @@ class IrcBot(client.SimpleClient):
         print "(NOTICE) {0}".format(event.message)
 
     def welcome_message(self,client,event):
-        print "INSIDE THE LOOP"
-        print self.channels
         for chan in self.channels_join:
-            print "Starting to join",chan
             self.join(chan)
-            print "Joining", chan
-
-        print "OUTSIDE THE LOOP"
 
     def bot_start(self):
         self["welcome"].add_handler(self.welcome_message)
