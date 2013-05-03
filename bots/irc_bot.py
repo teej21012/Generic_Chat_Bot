@@ -1,6 +1,8 @@
 ## ircutils documentation: http://dev.guardedcode.com/docs/ircutils/py-modindex.html
 from ircutils import client
 import ConfigParser
+from ircLoader import IrcLoader
+import sys
 
 
 class IrcBot(client.SimpleClient):
@@ -21,10 +23,39 @@ class IrcBot(client.SimpleClient):
         channels_string = config.get('Settings', 'channels')
         self.channels_join = list(filter(None, (x.strip() for x in channels_string.splitlines())))
 
+        plugin_string = config.get('Settings', 'plugins')
+        self.plugins = list(filter(None, (x.strip() for x in plugin_string.splitlines())))
+
+        self.mod_loader = IrcLoader()
+
         client.SimpleClient.__init__(self, self.nick)
 
     def message_printer(self, client, event):
         print "<{0}/{1}> {2}".format(event.source, event.target, event.message)
+
+    def run_mods(self, client, event):
+        print "MODS",self.mod_loader.listMods()
+        for mod in self.mod_loader.listMods():
+            try:
+                msg = self.mod_loader.run(mod, event.message, event.source, event.target)
+                self.send_message(event.target, msg)
+            except:
+                print "Error running mod:", sys.exc_info()
+
+    def message_handler(self, client, event):
+
+        ## Check for Admin commands
+        if event.message[0] == "@" and event.source == self.owner:
+            split = event.message.split()
+            cmd = split[0]
+            arg = split[1]
+
+            if cmd == "@load":
+                self.mod_loader.load(arg)
+
+        ## Check for bot commands
+        if event.message[0] == "!":
+            print "BOT COMMAND RECIEVED!"
 
     def notice_printer(self, client, event):
         print "(NOTICE) {0}".format(event.message)
@@ -36,6 +67,8 @@ class IrcBot(client.SimpleClient):
     def bot_start(self):
         self["welcome"].add_handler(self.welcome_message)
         self["notice"].add_handler(self.notice_printer)
-        self["channel_message"].add_handler(self.message_printer, priority=1)
+        self["message"].add_handler(self.message_printer)
+        self["message"].add_handler(self.message_handler)
+        self["message"].add_handler(self.run_mods)
         self.connect(self.server, self.port, password=self.password)
         self.start()
