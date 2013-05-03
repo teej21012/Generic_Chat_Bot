@@ -21,7 +21,6 @@ class IrcBot(client.SimpleClient):
         channels_string = config.get('Settings', 'channels')
         self.channels_join = list(filter(None, (x.strip() for x in channels_string.splitlines())))
 
-        ##self.bot = client.SimpleClient(nick = self.nick)
         client.SimpleClient.__init__(self, self.nick)
 
     def message_printer(self, client, event):
