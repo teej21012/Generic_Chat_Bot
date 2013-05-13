@@ -21,7 +21,6 @@ def run(inp,sender,channel):
         gift = ' ' + gift
     
     if ("what do you give a bitch?" in inp.lower()):
-        print "HEY IM RUNNING"
         return 'GIVE THAT BITCH A' + gift + '. BITCHES LOVE ' + plural + '.'
     else:
         return ""

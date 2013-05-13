@@ -1,7 +1,7 @@
 ## ircutils documentation: http://dev.guardedcode.com/docs/ircutils/py-modindex.html
 from ircutils import client
 import ConfigParser
-from ircLoader import IrcLoader
+from plugins.irc_loader import IrcLoader
 import sys
 
 
@@ -34,7 +34,6 @@ class IrcBot(client.SimpleClient):
         print "<{0}/{1}> {2}".format(event.source, event.target, event.message)
 
     def run_mods(self, client, event):
-        print "MODS",self.mod_loader.listMods()
         for mod in self.mod_loader.listMods():
             try:
                 msg = self.mod_loader.run(mod, event.message, event.source, event.target)
@@ -52,10 +51,6 @@ class IrcBot(client.SimpleClient):
 
             if cmd == "@load":
                 self.mod_loader.load(arg)
-
-        ## Check for bot commands
-        if event.message[0] == "!":
-            print "BOT COMMAND RECIEVED!"
 
     def notice_printer(self, client, event):
         print "(NOTICE) {0}".format(event.message)
