@@ -50,7 +50,16 @@ class IrcBot(client.SimpleClient):
             arg = split[1]
 
             if cmd == "@load":
-                self.mod_loader.load(arg)
+                try:
+                    self.mod_loader.load(arg)
+                except:
+                    print "Error loading mod:", sys.exc_info()
+
+            if cmd == "@unload":
+                try:
+                    self.mod_loader.unload(arg)
+                except:
+                    print "Error unloading mod:", sys.exc_info()
 
     def notice_printer(self, client, event):
         print "(NOTICE) {0}".format(event.message)

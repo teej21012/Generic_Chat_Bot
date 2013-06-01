@@ -8,6 +8,9 @@ vowels = set('aeiou')
 
 ## What the module should return when processing text from IRC
 ## Gets inp from IRC, processes it, and returns the
+def buildup():
+    print "We gonna tell dem what to give bitches."
+
 def run(inp,sender,channel):
 
     words = [line.strip() for line in open('../plugins/items.dic')]
@@ -53,3 +56,6 @@ def pluralize(singular):
         suffix = 's'
     plural = root + suffix
     return plural
+
+def teardown():
+    print "No more telling them what to give bitches."
