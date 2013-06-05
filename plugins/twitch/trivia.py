@@ -29,7 +29,7 @@ def run(inp, sender, channel):
         return ans
 
     if data["asked"] == "true":
-        if inp == str.lower(data['answer']):
+        if str.lower(inp) == str.lower(data['answer']):
             data["asked"] = "false"
             temp.save_temp(t_file, data)
             return "You are correct " + sender + "!"
@@ -37,7 +37,7 @@ def run(inp, sender, channel):
     if inp == "stop trivia" and sender == "riotgradius":
         data["asked"] = "false"
         temp.save_temp(t_file, data)
-        return "Ending this question."
+        return "Skipping this question."
 
     return ""
 
