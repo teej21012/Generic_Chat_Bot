@@ -1,4 +1,5 @@
-name = "twitch_mod.py"
+## Name of the module, to be returned in desc()
+name = "topic_changer.py"
 
 
 def buildup():
@@ -7,18 +8,11 @@ def buildup():
 
 def run(inp, sender, channel):
     #return sender + " This was your input " + inp
-
-    ## Check for banned phrases
-
-    ## Check for spam based on velocity
-
-    ## Check for spam based on repeated phrases
-
     return ""
 
 
 def desc():
-    return "Helps moderate Twitch chat rooms."
+    return "Changes Twitch channel title based on current LoL game"
 
 
 def teardown():
