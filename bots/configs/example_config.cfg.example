@@ -1,0 +1,10 @@
+[Settings]
+server = server host name
+port = server port
+nick = bot nickname
+username = bot username
+password = bot password
+channels =
+    list of channels for bot to join, separate with comma
+owner = owner irc nick, used for admin commands
+plugins =
