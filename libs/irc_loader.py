@@ -13,7 +13,6 @@ class IrcLoader():
     def load(self, modPath, message_callback_function):
         split = modPath.split('/')
         name = split[len(split) - 1]
-        print name
         self.modList[name] = self.nl.loadMod(modPath)
         self.modList[name].buildup(message_callback_function)
 
