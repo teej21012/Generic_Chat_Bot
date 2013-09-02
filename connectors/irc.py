@@ -1,7 +1,7 @@
 ## ircutils documentation: http://dev.guardedcode.com/docs/ircutils/py-modindex.html
 from ircutils import client
+from libs.irc_loader import IrcLoader
 import ConfigParser
-from plugins.irc_loader import IrcLoader
 import sys
 
 
@@ -26,20 +26,15 @@ class IrcBot(client.SimpleClient):
         plugin_string = config.get('Settings', 'plugins')
         self.plugins = list(filter(None, (x.strip() for x in plugin_string.splitlines())))
 
-        self.mod_loader = IrcLoader()
+        self.plugin_loader = IrcLoader()
 
         client.SimpleClient.__init__(self, self.nick)
 
+    def send_message_callback(self,target="",message=""):
+        self.send_message(target,message)
+
     def message_printer(self, client, event):
         print "<{0}/{1}> {2}".format(event.source, event.target, event.message)
-
-    def run_mods(self, client, event):
-        for mod in self.mod_loader.listMods():
-            try:
-                msg = self.mod_loader.run(mod, event.message, event.source, event.target)
-                self.send_message(event.target, msg)
-            except:
-                print "Error running mod:", sys.exc_info()
 
     def message_handler(self, client, event):
 
@@ -51,18 +46,25 @@ class IrcBot(client.SimpleClient):
 
             if cmd == "@load":
                 try:
-                    self.mod_loader.load(arg)
+                    self.plugin_loader.load(arg,self.send_message_callback)
                 except:
                     print "Error loading mod:", sys.exc_info()
 
             if cmd == "@unload":
                 try:
-                    self.mod_loader.unload(arg)
+                    self.plugin_loader.unload(arg)
                 except:
                     print "Error unloading mod:", sys.exc_info()
 
     def notice_printer(self, client, event):
         print "(NOTICE) {0}".format(event.message)
+
+    def run_mods(self, client, event):
+        for mod in self.plugin_loader.listMods():
+            try:
+                self.plugin_loader.run(mod, event.message, event.source, event.target)
+            except:
+                print "Error running mod:", sys.exc_info()
 
     def welcome_message(self,client,event):
         for chan in self.channels_join:

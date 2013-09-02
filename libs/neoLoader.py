@@ -7,7 +7,7 @@ import sys
 
 class NeoLoader:
     def __init__(self):
-        print "Initiated"
+        print "NeoLoader initialized."
 
     ## http://code.davidjanes.com/blog/2008/11/27/how-to-dynamically-load-python-code/
     def loadMod(self,path):

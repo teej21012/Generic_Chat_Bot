@@ -1,1 +1,0 @@
-## Plugin for controlling a Spotify playlist via chat
