@@ -6,4 +6,4 @@ Generic chat libraries for creating bots for various services.
 Notes
 ================
 
-Starting this project over with a bit more organization in mind.  Here's the general direction:
+Create the ability to subscribe and unsubscribe to each chat process.  That way we can manage multiple processes.
