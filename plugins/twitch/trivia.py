@@ -3,12 +3,14 @@
 import sqlite3
 import sys
 import libs.load_temp as temp
+from libs.permissions import Permissions
 
 db = sqlite3.connect('plugins/twitch/questions.sqlite')
 c = db.cursor()
 name = "trivia.py"
 t_file = "plugins/twitch/trivia.tmp"
 data = temp.load_temp(t_file)
+perm = Permissions()
 
 def buildup(send_message_callback):
     print "This function is run at buildup of function."
@@ -16,13 +18,13 @@ def buildup(send_message_callback):
     send_message_function = send_message_callback
 
 def send_input(inp, sender, channel):
-    if inp == "trivia" and data["asked"] == "false":
+    if inp == "trivia" and data["asked"] == "false" and perm.isMod(sender):
         trivia_question(channel)
 
     if data["asked"] == "true":
         trivia_answer(channel,inp,sender)
 
-    if len(inp.split()) == 2 and inp.split()[0] == "trivia":
+    if len(inp.split()) == 2 and inp.split()[0] == "trivia" and perm.isMod(sender):
         send_message_function(channel,"Starting a trivia loop of " + inp.split()[1] + " questions.")
         data["loop"] = "true"
         data["loop_count"] = str(int(inp.split()[1]) - 1)
@@ -32,7 +34,7 @@ def desc():
     return ""
 
 def teardown():
-    print "This function is run at removal of the plugin"
+    print "Removing the Trivia module."
 
 def trivia_question(channel):
     ans = ""
